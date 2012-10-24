@@ -317,7 +317,10 @@ class Game
     mat4 viewProjectionMatrix = _camera.projectionMatrix;
     mat4 viewMatrix = _camera.lookAtMatrix;
     if (_debugDrawCameraTransform) {
-      _debugDrawManager.addAxes(viewMatrix, 2.0, 2.0);
+      mat4 T = new mat4.copy(viewMatrix);
+      T[2].scale(-1.0);
+      T[3].xyz = _camera.position;
+      _debugDrawManager.addAxes(T, 2.0, 2.0);
       _debugDrawCameraTransform = false;
     }
     viewProjectionMatrix.multiply(viewMatrix);
