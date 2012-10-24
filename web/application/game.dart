@@ -25,6 +25,7 @@ class Game
    * Can draw many different debug primitives for a specified time length.
    */
   DebugDrawManager _debugDrawManager;
+  bool _debugDrawCameraTransform;
 
   /**
    * Resource handler for the game.
@@ -221,6 +222,7 @@ class Game
   static const _keyCodeA = 65;
   static const _keyCodeD = 68;
   static const _keyCodeS = 83;
+  static const _keyCodeT = 84;
   static const _keyCodeW = 87;
 
   /**
@@ -239,6 +241,9 @@ class Game
       break;
       case _keyCodeW:
         _cameraController.forward = true;
+      break;
+      case _keyCodeT:
+        _debugDrawCameraTransform = true;
       break;
     }
   }
@@ -311,6 +316,10 @@ class Game
   void _updateCameraTransform() {
     mat4 viewProjectionMatrix = _camera.projectionMatrix;
     mat4 viewMatrix = _camera.lookAtMatrix;
+    if (_debugDrawCameraTransform) {
+      _debugDrawManager.addAxes(viewMatrix, 2.0, 2.0);
+      _debugDrawCameraTransform = false;
+    }
     viewProjectionMatrix.multiply(viewMatrix);
     // Copy into
     viewProjectionMatrix.copyIntoArray(_viewProjectitonMatrixArray);
@@ -479,32 +488,19 @@ class Game
   vec3 _unitZ = new vec3(0.0, 0.0, 1.0);
   vec3 _origin = new vec3(0.0, 0.0, 0.0);
 
+  mat4 _rotateX = new mat4.identity();
+  mat4 _rotateY = new mat4.identity();
+  mat4 _rotateZ = new mat4.identity();
+
   /* Draw a bunch of debug primitives */
   void _drawDebugPrims(double dt) {
-    _angle += dt * 3.14159;
+    double deltaAngle = dt * 3.14159;
+    _angle += deltaAngle;
     double _scale = (sin(_angle) + 1.0)/2.0;
 
-    mat4 _rotateX = new mat4.rotationX(_angle);
-    mat4 _rotateY = new mat4.rotationY(_angle);
-    mat4 _rotateZ = new mat4.rotationZ(_angle);
-
-    // Global Axis
-    _debugDrawManager.addLine(_origin, (_unitX * 20.0), _colors['Red']);
-    _debugDrawManager.addLine(_origin, (_unitY * 20.0), _colors['Green']);
-    _debugDrawManager.addLine(_origin, (_unitZ * 20.0), _colors['Blue']);
-
-
-    // Rotating transformations
-    {
-      mat4 T = null;
-      T = new mat4.translationRaw(5.0, 0.0, 0.0) * _rotateX;
-      _debugDrawManager.addAxes(T, 4.0);
-      T = new mat4.translationRaw(0.0, 5.0, 0.0) * _rotateY;
-      _debugDrawManager.addAxes(T, 4.0);
-      T = new mat4.translationRaw(0.0, 0.0, 5.0) * _rotateZ;
-      _debugDrawManager.addAxes(T, 4.0);
-    }
-
+    _rotateX.rotateX(deltaAngle);
+    _rotateY.rotateY(deltaAngle);
+    _rotateZ.rotateZ(deltaAngle);
 
     // Rotating circles
     {
