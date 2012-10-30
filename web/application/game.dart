@@ -49,7 +49,7 @@ class Game
   /// Random number generator
   Math.Random _randomGenerator;
   /// The time of the last frame
-  int _lastFrameTime;
+  double _lastFrameTime;
   /// The angle to rotate by
   double _angle;
 
@@ -183,6 +183,7 @@ class Game
 
     // Create the debug draw manager.
     _debugDrawManager = new DebugDrawManager();
+    _debugDrawCameraTransform = false;
     // Initialize it to use our Spectre graphics device.
     _debugDrawManager.init(_graphicsDevice);
 
@@ -201,7 +202,7 @@ class Game
     _color = new vec3(0.0, 0.0, 0.0);
     _direction = new vec3(1.0, 1.0, 1.0);
     _randomGenerator = new Math.Random();
-    _lastFrameTime = 0;
+    _lastFrameTime = 0.0;
     _angle = 0.0;
 
     // Create camera
@@ -497,7 +498,7 @@ class Game
 
   /* Draw a bunch of debug primitives */
   void _drawDebugPrims(double dt) {
-    double deltaAngle = dt * 3.14159;
+    double deltaAngle = dt * Math.PI;
     _angle += deltaAngle;
     double _scale = (sin(_angle) + 1.0)/2.0;
 
@@ -533,7 +534,7 @@ class Game
    * All game logic should be updated within this method.
    * Any animation should be based upon the current [time].
    */
-  void update(int time)
+  void update(double time)
   {
     // Get the change in time
     double dt = (time - _lastFrameTime) * 0.001;
@@ -639,7 +640,6 @@ class Game
     int meshResource = _resourceManager.registerResource(value);
 
     _resourceManager.addEventCallback(meshResource, ResourceEvents.TypeUpdate, (type, resource) {
-      print('Mesh loaded');
       MeshResource mesh = resource;
 
       // Get the description of the layout
@@ -699,7 +699,7 @@ class Game
    *
    * The current [time] is passed in.
    */
-  static void onUpdate(int time)
+  static void onUpdate(double time)
   {
     _gameInstance.update(time);
     _gameInstance.draw();
