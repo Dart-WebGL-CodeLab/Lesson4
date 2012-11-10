@@ -77,7 +77,7 @@ class Game
    * The camera is stationary in this lesson so an associated mat4
    * is not needed.
    */
-  Float32Array _viewProjectitonMatrixArray;
+  Float32Array _viewProjectionMatrixArray;
 
   //---------------------------------------------------------------------
   // Buffer variables
@@ -179,11 +179,12 @@ class Game
     // Setup the resource manager
     _resourceManager = new ResourceManager();
 
- 
+
     // Create the debug draw manager.
     _debugDrawManager = new DebugDrawManager();
+    // Set _debugDrawCameraTransform to false.
     _debugDrawCameraTransform = false;
-    // Initialize it to use our Spectre graphics device.
+    // Initialize _debugDrawManager to use our Spectre graphics device.
     _debugDrawManager.init(_graphicsDevice);
 
     // Create the viewport
@@ -325,7 +326,7 @@ class Game
     }
     viewProjectionMatrix.multiply(viewMatrix);
     // Copy into
-    viewProjectionMatrix.copyIntoArray(_viewProjectitonMatrixArray);
+    viewProjectionMatrix.copyIntoArray(_viewProjectionMatrixArray);
   }
 
   /**
@@ -342,7 +343,7 @@ class Game
     // The camera is pointed at the origin.
     _camera.focusPosition = new vec3.raw(0.0, 0.0, 0.0);
 
-    _viewProjectitonMatrixArray = new Float32Array(16);
+    _viewProjectionMatrixArray = new Float32Array(16);
     _updateCameraTransform();
 
     // Create the model matrix
@@ -455,18 +456,18 @@ class Game
   void _drawGridRaw(int gridLines, vec3 x, vec3 z, vec4 color) {
     final double midLine = (gridLines~/2).toDouble();
     vec3 o = new vec3.zero();
-    o.sub(z*midLine);
-    o.sub(x*midLine);
+    o.sub(z.scaled(midLine));
+    o.sub(x.scaled(midLine));
 
     for (int i = 0; i <= gridLines; i++) {
-      vec3 start = o + (z * (i-midLine)) + (x * -midLine);
-      vec3 end = o + (z * (i-midLine)) + (x * midLine);
+      vec3 start = o + (z.scaled(i-midLine)) + (x.scaled(-midLine));
+      vec3 end = o + (z.scaled(i-midLine)) + (x.scaled(midLine));
       _debugDrawManager.addLine(start, end, color);
     }
 
     for (int i = 0; i <= gridLines; i++) {
-      vec3 start = o + (x * (i-midLine)) + (z * -midLine);
-      vec3 end = o + (x * (i-midLine)) + (z * midLine);
+      vec3 start = o + (x.scaled(i-midLine)) + (z.scaled(-midLine));
+      vec3 end = o + (x.scaled(i-midLine)) + (z.scaled(midLine));
       _debugDrawManager.addLine(start, end, color);
     }
   }
@@ -606,7 +607,7 @@ class Game
     // Set the shader program
     _context.setShaderProgram(_shaderProgram);
     _context.setUniformMatrix4('objectTransform', _modelMatrixArray);
-    _context.setUniformMatrix4('cameraTransform', _viewProjectitonMatrixArray);
+    _context.setUniformMatrix4('cameraTransform', _viewProjectionMatrixArray);
 
     // Set the texture
     _context.setTextures(0, [_texture]);
