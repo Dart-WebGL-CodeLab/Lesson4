@@ -180,12 +180,10 @@ class Game
     _resourceManager = new ResourceManager();
 
 
-    // Create the debug draw manager.
-    _debugDrawManager = new DebugDrawManager();
+    // [FIXME] Create the debug draw manager.
     // Set _debugDrawCameraTransform to false.
     _debugDrawCameraTransform = false;
-    // Initialize _debugDrawManager to use our Spectre graphics device.
-    _debugDrawManager.init(_graphicsDevice);
+    // [FIXME] Initialize _debugDrawManager to use our Spectre graphics device.
 
     // Create the viewport
     var viewportProperties = {
@@ -508,18 +506,18 @@ class Game
 
     // Rotating circles
     {
-      _debugDrawManager.addCircle(new vec3(0.0, 10.0, 0.0), _rotateY.transformed3(_unitX), 3.14, _colors['Red']);
-      _debugDrawManager.addCircle(new vec3(0.0, 0.0, 10.0), _rotateZ.transformed3(_unitY), 3.14, _colors['Green']);
-      _debugDrawManager.addCircle(new vec3(10.0, 0.0, 0.0), _rotateX.transformed3(_unitZ), 3.14, _colors['Blue']);
+      // [FIXME] Draw circle rotating around X axis.
+      // [FIXME] Draw circle rotating around Y axis.
+      // [FIXME] Draw circle rotating around Z axis.
     }
 
 
     // AABB and a line from min to max
     {
-      _debugDrawManager.addAABB(new vec3(5.0, 5.0, 5.0), new vec3(10.0, 10.0, 10.0), _colors['Gray']);
-      _debugDrawManager.addCross(new vec3(5.0, 5.0, 5.0), _colors['White']);
-      _debugDrawManager.addCross(new vec3(10.0, 10.0, 10.0), _colors['White']);
-      _debugDrawManager.addLine(new vec3(5.0, 5.0, 5.0), new vec3(10.0, 10.0, 10.0), _colors['Orange']);
+      // [FIXME] Draw an AABB.
+      // [FIXME] Draw a Cross.
+      // [FIXME] Draw a line
+      // [FIXME] Draw a sphere.
     }
   }
 
@@ -539,8 +537,7 @@ class Game
     // Get the change in time
     double dt = (time - _lastFrameTime) * 0.001;
     _lastFrameTime = time;
-    // Update the debug draw world
-    _debugDrawManager.update(dt);
+    // [FIXME] Update the debug draw manager.
     // Update the camera
     _cameraController.UpdateCamera(dt, _camera);
     _updateCameraTransform();
@@ -575,8 +572,7 @@ class Game
     _drawDebugGrid();
     _drawDebugPrims(dt);
 
-    // Prepare the debug draw manager to render.
-    _debugDrawManager.prepareForRender();
+    // [FIXME] Prepare the _debugDrawManager for render.
   }
 
   /**
@@ -622,7 +618,7 @@ class Game
     _context.setPrimitiveTopology(GraphicsContext.PrimitiveTopologyTriangles);
     _context.drawIndexed(_meshIndexCount, 0);
 
-    _debugDrawManager.render(_camera);
+    // [FIXME] Render _debugDrawManager.
   }
 
   //---------------------------------------------------------------------
