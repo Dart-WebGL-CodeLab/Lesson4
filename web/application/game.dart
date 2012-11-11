@@ -178,11 +178,10 @@ class Game
 
     // Setup the resource manager
     _resourceManager = new ResourceManager();
-
-
-    // [FIXME] Create the debug draw manager.
     // Set _debugDrawCameraTransform to false.
     _debugDrawCameraTransform = false;
+
+    // [FIXME] Create the debug draw manager.
     // [FIXME] Initialize _debugDrawManager to use our Spectre graphics device.
 
     // Create the viewport
@@ -504,6 +503,8 @@ class Game
     _rotateY.rotateY(deltaAngle);
     _rotateZ.rotateZ(deltaAngle);
 
+    // NOTE: DO THIS LAST.
+
     // Rotating circles
     {
       // [FIXME] Draw circle rotating around X axis.
@@ -618,7 +619,7 @@ class Game
     _context.setPrimitiveTopology(GraphicsContext.PrimitiveTopologyTriangles);
     _context.drawIndexed(_meshIndexCount, 0);
 
-    // [FIXME] Render _debugDrawManager.
+    // [FIXME] Render _debugDrawManager from the camera.
   }
 
   //---------------------------------------------------------------------
